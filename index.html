@@ -6,7 +6,7 @@
     <title>Hybrid Cryptography System</title>
     <meta name="description" content="A web application demonstrating multi-layered encryption using Hill Cipher, SDES, and LSB steganography">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -162,7 +162,7 @@
                         </div>
                     </div>
                     <div class="step-content">
-                        <button class="btn btn-primary" onclick="extractMessage()">
+                        <button class="btn btn-decryption" onclick="extractMessage()">
                              Extract from Image
                         </button>
                         <div class="result" id="extractResult"></div>
@@ -183,7 +183,7 @@
                             <label for="decryptSdesKey">SDES Key (10 bits):</label>
                             <input type="text" id="decryptSdesKey" value="1010000010" pattern="[01]{10}" maxlength="10">
                         </div>
-                        <button class="btn btn-primary" onclick="decryptSDES()">
+                        <button class="btn btn-decryption" onclick="decryptSDES()">
                              Decrypt SDES
                         </button>
                         <div class="result" id="sdesDecryptResult"></div>
@@ -209,7 +209,7 @@
                                 <input type="number" id="decryptKey11" value="7" min="0" max="25">
                             </div>
                         </div>
-                        <button class="btn btn-primary" onclick="decryptHillCipher()">
+                        <button class="btn btn-decryption" onclick="decryptHillCipher()">
                              Decrypt Hill Cipher
                         </button>
                         <div class="result" id="hillDecryptResult"></div>
