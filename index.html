@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Cryptography System</title>
+    <meta name="description" content="A web application demonstrating multi-layered encryption using Hill Cipher, SDES, and LSB steganography">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Hybrid Cryptography System</h1>
+            <p>Multi-layered encryption using Hill Cipher, SDES, and LSB Steganography</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Encryption Panel (Left Side) -->
+            <div class="panel encryption-panel">
+                <div class="panel-header">
+                    <h2> Encryption Workflow</h2>
+                </div>
+
+                <!-- Step 1: Plain Text Input -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number blue">1</div>
+                        <h3>Plain Text Input</h3>
+                        <div class="step-status" id="step1-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <textarea id="plainText" placeholder="Enter your message here..." rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Hill Cipher -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number blue">2</div>
+                        <h3>Hill Cipher Encryption</h3>
+                        <div class="step-status" id="step2-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="hill-key-matrix">
+                            <label>Key Matrix (2x2):</label>
+                            <div class="matrix">
+                                <input type="number" id="key00" value="3" min="0" max="25">
+                                <input type="number" id="key01" value="2" min="0" max="25">
+                                <input type="number" id="key10" value="5" min="0" max="25">
+                                <input type="number" id="key11" value="7" min="0" max="25">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="processHillCipher()">
+                             Encrypt with Hill Cipher
+                        </button>
+                        <div class="result" id="hillResult"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: SDES Encryption -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number blue">3</div>
+                        <h3>SDES Encryption</h3>
+                        <div class="step-status" id="step3-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="input-group">
+                            <label for="sdesKey">SDES Key (10 bits):</label>
+                            <input type="text" id="sdesKey" value="1010000010" pattern="[01]{10}" maxlength="10">
+                        </div>
+                        <button class="btn btn-primary" onclick="processSDES()">
+                            Encrypt with SDES
+                        </button>
+                        <div class="result" id="sdesResult"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Image Upload -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number blue">4</div>
+                        <h3>Cover Image Upload</h3>
+                        <div class="step-status" id="step4-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="upload-area" onclick="document.getElementById('coverImage').click()">
+                            <div class="upload-icon">📁</div>
+                            <p>Click to upload cover image</p>
+                            <input type="file" id="coverImage" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
+                        </div>
+                        <canvas id="imagePreview" style="display: none; max-width: 300px; max-height: 200px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Step 5: Steganography -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number blue">5</div>
+                        <h3>LSB Steganography</h3>
+                        <div class="step-status" id="step5-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <button class="btn btn-primary" onclick="processStego()">
+                            🖼️ Hide Message in Image
+                        </button>
+                        <div class="result">
+                            <canvas id="stegoResult" style="display: none; max-width: 300px; max-height: 200px;"></canvas>
+                            <div class="download-section" id="downloadSection" style="display: none;">
+                                <button class="btn btn-success" onclick="downloadImage()">
+                                    ⬇️ Download Encrypted Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decryption Panel (Right Side) -->
+            <div class="panel decryption-panel">
+                <div class="panel-header">
+                    <h2>🔓 Decryption Workflow</h2>
+                </div>
+
+                <!-- Step 1: Image Upload -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number green">1</div>
+                        <h3>Encrypted Image Upload</h3>
+                        <div class="step-status" id="decrypt-step1-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="upload-area" onclick="document.getElementById('encryptedImage').click()">
+                            <div class="upload-icon">📁</div>
+                            <p>Click to upload encrypted image</p>
+                            <input type="file" id="encryptedImage" accept="image/*" style="display: none;" onchange="handleEncryptedImageUpload(this)">
+                        </div>
+                        <canvas id="encryptedImagePreview" style="display: none; max-width: 300px; max-height: 200px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Step 2: Extract Message -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number green">2</div>
+                        <h3>Extract Hidden Message</h3>
+                        <div class="step-status" id="decrypt-step2-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <button class="btn btn-primary" onclick="extractMessage()">
+                             Extract from Image
+                        </button>
+                        <div class="result" id="extractResult"></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: SDES Decryption -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number green">3</div>
+                        <h3>SDES Decryption</h3>
+                        <div class="step-status" id="decrypt-step3-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="input-group">
+                            <label for="decryptSdesKey">SDES Key (10 bits):</label>
+                            <input type="text" id="decryptSdesKey" value="1010000010" pattern="[01]{10}" maxlength="10">
+                        </div>
+                        <button class="btn btn-primary" onclick="decryptSDES()">
+                             Decrypt SDES
+                        </button>
+                        <div class="result" id="sdesDecryptResult"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Hill Cipher Decryption -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number green">4</div>
+                        <h3>Hill Cipher Decryption</h3>
+                        <div class="step-status" id="decrypt-step4-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="hill-key-matrix">
+                            <label>Key Matrix (2x2):</label>
+                            <div class="matrix">
+                                <input type="number" id="decryptKey00" value="3" min="0" max="25">
+                                <input type="number" id="decryptKey01" value="2" min="0" max="25">
+                                <input type="number" id="decryptKey10" value="5" min="0" max="25">
+                                <input type="number" id="decryptKey11" value="7" min="0" max="25">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="decryptHillCipher()">
+                             Decrypt Hill Cipher
+                        </button>
+                        <div class="result" id="hillDecryptResult"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Final Result -->
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number green">5</div>
+                        <h3>Original Message</h3>
+                        <div class="step-status" id="decrypt-step5-status">
+                            <span class="status-text">Pending</span>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="final-result" id="finalResult">
+                            <p>Your decrypted message will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Process Flow Visualization -->
+        <div class="flow-visualization">
+            <h3>🔄 Encryption Process Flow</h3>
+            <div class="flow-steps">
+                <div class="flow-step">Plain Text</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Hill Cipher</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">SDES</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Steganography</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Encrypted Image</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Educational cryptography demonstration - Not for production use</p>
+            <p>Built with HTML, CSS, and JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
