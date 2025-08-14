@@ -578,7 +578,7 @@ function decryptHillCipher() {
             
             // Show final result
             document.getElementById('finalResult').innerHTML = `
-                <h4>🎉 Original Message Recovered!</h4>
+                <h4>Original Message Recovered!</h4>
                 <p style="font-size: 1.2rem; margin-top: 10px;">"${decrypted}"</p>
             `;
         } catch (error) {
