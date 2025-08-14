@@ -257,7 +257,15 @@ textarea {
     transform: none;
     box-shadow: none;
 }
+/* Add this new style to your style.css file */
+.btn-decryption {
+    background: #059669; /* Green color */
+}
 
+.btn-decryption:hover {
+    background: #047857; /* Darker green for hover state */
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+}
 /* Upload area */
 .upload-area {
     border: 2px dashed #cbd5e1;
